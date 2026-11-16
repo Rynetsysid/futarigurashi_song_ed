@@ -1,7 +1,8 @@
 /* ==============================================================================
    STREAM MUSIK RYNET - STYLESHEET RESMI
    Lagu: 「ココロノサクラ」 (Kokoro no Sakura)
-   Desain: Responsif Desktop & Android (Optimal Mode Normal & Mode Desktop)
+   Desain: Responsif Desktop & Android
+   Mode Landscape HP: Floating HUD Mengambang, Video 100% Utuh (No Crop), Auto-Hide 5s
    ============================================================================== */
 
 * {
@@ -21,12 +22,12 @@ body {
     align-items: center;
     justify-content: flex-start;
     min-height: 100vh;
-    /* Memberi jarak napas atas agar tidak mepet dengan batasan URL bar Chrome */
     padding-top: 38px;
     padding-bottom: 40px;
     padding-left: 16px;
     padding-right: 16px;
     overflow-x: hidden;
+    transition: background 0.3s;
 }
 
 /* Container Pembungkus Lebar Maksimal */
@@ -38,8 +39,9 @@ body {
     gap: 14px;
 }
 
-/* Theater Player (Menampung Layar CG & Card Kontrol) */
+/* Theater Player (Menampung Layar CG & Kontrol) */
 .player-theater {
+    position: relative;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -47,7 +49,7 @@ body {
 }
 
 /* ==============================================================================
-   1. CG VIEWPORT (LAYAR CG ASLI 16:9 BERSIH)
+   1. CG VIEWPORT (LAYAR CG ASLI 16:9 BERSIH - TANPA CROP)
    ============================================================================== */
 .player-wrapper {
     position: relative;
@@ -57,6 +59,7 @@ body {
     border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 14px 45px rgba(255, 140, 0, 0.25), 0 0 0 1px rgba(255, 140, 0, 0.22);
+    cursor: pointer;
 }
 
 .cg-viewport {
@@ -64,14 +67,18 @@ body {
     inset: 0;
     background: #000000;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/* Video/CG Asli Tanpa Crop (object-fit: contain) */
 .cg-image {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     opacity: 0;
     transition: opacity 1.2s ease-in-out;
 }
@@ -89,7 +96,71 @@ body {
 }
 
 /* ==============================================================================
-   LIRIK MENGAMBANG (BERSIH DI DALAM CG TANPA TERHALANG KONTROL)
+   INDIKATOR EFEK RIAK DOUBLE-TAP (LOMPAT ±5 DETIK)
+   ============================================================================== */
+.ripple-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 38%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 8;
+    transition: opacity 0.25s ease;
+}
+
+.ripple-overlay.ripple-left {
+    left: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255, 140, 0, 0.25) 0%, transparent 70%);
+}
+
+.ripple-overlay.ripple-right {
+    right: 0;
+    background: radial-gradient(circle at 70% 50%, rgba(255, 140, 0, 0.25) 0%, transparent 70%);
+}
+
+.ripple-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: rgba(18, 18, 24, 0.88);
+    border: 1px solid rgba(255, 140, 0, 0.5);
+    border-radius: 50%;
+    width: 78px;
+    height: 78px;
+    color: #ffeedb;
+    box-shadow: 0 0 24px rgba(255, 140, 0, 0.6);
+    transform: scale(0.7);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ripple-circle svg {
+    width: 24px;
+    height: 24px;
+    fill: #ffb347;
+}
+
+.ripple-circle span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.ripple-overlay.active {
+    opacity: 1;
+}
+
+.ripple-overlay.active .ripple-circle {
+    transform: scale(1.05);
+}
+
+/* ==============================================================================
+   LIRIK MENGAMBANG (BERSIH DI DALAM CG)
    ============================================================================== */
 .floating-lyrics {
     position: absolute;
@@ -98,7 +169,7 @@ body {
     right: 4%;
     text-align: center;
     pointer-events: none;
-    z-index: 3;
+    z-index: 5;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -149,7 +220,7 @@ body {
 }
 
 /* ==============================================================================
-   2. CARD KONTROL TERPISAH (DI BAWAH LAYAR CG) - DESKTOP LAYOUT (DEFAULT)
+   2. CARD KONTROL TERPISAH (DESKTOP & PORTRAIT HP)
    ============================================================================== */
 .control-card {
     width: 100%;
@@ -164,9 +235,9 @@ body {
     justify-content: space-between;
     gap: 18px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-/* Kelompok Tombol Pemutar */
 .control-buttons-group {
     display: flex;
     align-items: center;
@@ -185,7 +256,7 @@ body {
 }
 
 .btn-control:active {
-    transform: scale(0.94);
+    transform: scale(0.92);
 }
 
 /* Tombol Skip 5 Detik */
@@ -194,7 +265,7 @@ body {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #ffeedb;
     gap: 2px;
@@ -252,7 +323,7 @@ body {
     margin-left: 0;
 }
 
-/* Tombol Replay Khusus (Hanya Muncul Saat Selesai / Tamat) */
+/* Tombol Replay Khusus */
 .btn-replay {
     height: 44px;
     padding: 0 18px;
@@ -308,7 +379,6 @@ body {
     text-align: center;
 }
 
-/* Container Range Input Slider Modern */
 .seeker-slider-container {
     position: relative;
     flex: 1;
@@ -330,7 +400,6 @@ body {
     z-index: 2;
 }
 
-/* Knob Penarik Slider (Thumb) */
 .seeker-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -359,12 +428,6 @@ body {
     cursor: pointer;
 }
 
-.seeker-slider::-moz-range-thumb:hover {
-    transform: scale(1.28);
-    box-shadow: 0 0 16px rgba(255, 165, 0, 1);
-}
-
-/* Lapisan Warna Progress Oranye Aktif */
 .seeker-fill {
     position: absolute;
     left: 0;
@@ -454,7 +517,6 @@ body {
     transition: transform 0.3s ease;
 }
 
-/* Animasi Buka/Tutup Accordion */
 .accordion-body {
     max-height: 0;
     opacity: 0;
@@ -558,10 +620,9 @@ body {
 }
 
 /* ==============================================================================
-   RESPONSIVITAS MOBILE (ANDROID & TOUCHSCREEN DEVICE)
-   Termasuk Proteksi "Mode Desktop" di Chrome Android!
+   RESPONSIVITAS MOBILE (PORTRAIT HP)
    ============================================================================== */
-@media (max-width: 768px), (pointer: coarse) and (orientation: portrait) {
+@media (max-width: 768px) and (orientation: portrait), (pointer: coarse) and (orientation: portrait) {
     body {
         padding-top: 18px;
         padding-left: 10px;
@@ -572,7 +633,6 @@ body {
         border-radius: 14px;
     }
 
-    /* Penyesuaian Ukuran Teks Lirik di Ponsel */
     .floating-lyrics {
         bottom: 16px;
         left: 3%;
@@ -594,7 +654,7 @@ body {
         max-width: 95%;
     }
 
-    /* TATA LETAK ANDROID: 2 BARIS ERGONOMIS JEMPOL */
+    /* Layout 2 Baris di Portrait */
     .control-card {
         flex-direction: column;
         gap: 12px;
@@ -602,7 +662,6 @@ body {
         border-radius: 14px;
     }
 
-    /* Baris 1: Seeker Slider Memanjang Penuh */
     .control-seeker-group {
         width: 100%;
         order: 1;
@@ -623,7 +682,6 @@ body {
         height: 18px;
     }
 
-    /* Baris 2: Pemutar di Tengah */
     .control-buttons-group {
         width: 100%;
         order: 2;
@@ -658,7 +716,7 @@ body {
     }
 
     .accordion-badge {
-        display: none; /* Sembunyikan badge di layar sempit agar judul muat */
+        display: none;
     }
 
     .info-footer {
@@ -668,69 +726,173 @@ body {
     }
 }
 
-/* Proteksi khusus jika JS mendeteksi .force-mobile-layout */
-body.force-mobile-layout .control-card {
-    flex-direction: column !important;
-    gap: 12px !important;
-    padding: 14px 16px !important;
-}
+/* ==============================================================================
+   MODE LANDSCAPE / LAYAR PENUH HP (CINEMA FLOATING HUD)
+   Video 100% Utuh (No Crop), Kontrol Mengambang Transparan di Atas Video
+   ============================================================================== */
+@media (orientation: landscape) and (max-height: 600px), 
+       :fullscreen .player-theater, 
+       :-webkit-full-screen .player-theater {
+    
+    body {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #000000 !important;
+        overflow: hidden !important;
+    }
 
-body.force-mobile-layout .control-seeker-group {
-    width: 100% !important;
-    order: 1 !important;
-}
+    .main-container {
+        max-width: 100vw !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        gap: 0 !important;
+    }
 
-body.force-mobile-layout .control-buttons-group {
-    width: 100% !important;
-    order: 2 !important;
-    justify-content: center !important;
-    gap: 18px !important;
-}
+    .player-theater {
+        width: 100vw !important;
+        height: 100vh !important;
+        gap: 0 !important;
+    }
 
-/* Optimasi Khusus Layar Sangat Kecil (<= 420px) */
-@media (max-width: 420px) {
+    .player-wrapper {
+        width: 100vw !important;
+        height: 100vh !important;
+        aspect-ratio: auto !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    /* Video Tetap Utuh 16:9 Tanpa Terpotong (object-fit: contain) */
+    .cg-viewport {
+        background: #000000 !important;
+    }
+
+    .cg-image {
+        object-fit: contain !important;
+    }
+
+    /* Sembunyikan Accordion Info saat Landscape */
+    .info-accordion {
+        display: none !important;
+    }
+
+    /* TRANSFORMASI KONTROL: CARD HILANG -> MENJADI MENGAMBANG DI ATAS VIDEO */
+    .control-card {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        pointer-events: none !important;
+        z-index: 10 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    /* TOMBOL PEMUTAR MENGAMBANG DI TENGAH LAYAR */
+    .control-buttons-group {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 36px !important;
+        pointer-events: auto !important;
+    }
+
+    .btn-skip {
+        width: 48px !important;
+        height: 48px !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(8px) !important;
+        border: 1.5px solid rgba(255, 140, 0, 0.55) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .btn-skip svg {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .btn-play {
+        width: 60px !important;
+        height: 60px !important;
+        background: linear-gradient(135deg, #ff8c00 0%, #ffa500 100%) !important;
+        box-shadow: 0 0 25px rgba(255, 140, 0, 0.8) !important;
+    }
+
+    .btn-play svg {
+        width: 26px !important;
+        height: 26px !important;
+    }
+
+    .btn-replay {
+        height: 52px !important;
+        padding: 0 22px !important;
+        font-size: 15px !important;
+    }
+
+    /* SEEKER BAR MENGAMBANG DI BAGIAN BAWAH */
+    .control-seeker-group {
+        position: absolute !important;
+        bottom: 16px !important;
+        left: 24px !important;
+        right: 24px !important;
+        width: calc(100% - 48px) !important;
+        background: rgba(14, 14, 20, 0.68) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(255, 140, 0, 0.3) !important;
+        border-radius: 24px !important;
+        padding: 6px 18px !important;
+        pointer-events: auto !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .seeker-slider::-webkit-slider-thumb {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .seeker-slider::-moz-range-thumb {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    /* POSISI LIRIK DI MODE LANDSCAPE: DI ATAS SEEKER BAR */
     .floating-lyrics {
-        bottom: 12px;
-        gap: 3px;
+        bottom: 78px !important;
+        left: 6% !important;
+        right: 6% !important;
     }
 
     .lyric-jp {
-        font-size: 16px;
+        font-size: clamp(18px, 4vw, 26px) !important;
     }
 
     .lyric-romaji {
-        font-size: 11px;
+        font-size: clamp(12px, 2.5vw, 15px) !important;
     }
 
     .lyric-id {
-        font-size: 12px;
+        font-size: clamp(13px, 2.8vw, 16px) !important;
     }
 
-    .control-buttons-group {
-        gap: 14px;
+    /* AUTO-HIDE HUD KONTROL SETELAH 5 DETIK */
+    .player-theater.hud-hidden .control-card {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity 0.4s ease !important;
     }
-}
 
-/* ==============================================================================
-   MODE FULLSCREEN THEATER
-   ============================================================================== */
-:fullscreen .main-container,
-:-webkit-full-screen .main-container {
-    max-width: 100vw;
-    width: 100vw;
-    height: 100vh;
-    padding: 0;
-    justify-content: center;
-}
-
-:fullscreen .info-accordion,
-:-webkit-full-screen .info-accordion {
-    display: none !important;
-}
-
-:fullscreen .player-wrapper,
-:-webkit-full-screen .player-wrapper {
-    border-radius: 0;
-    box-shadow: none;
-    max-height: calc(100vh - 80px);
+    .player-theater:not(.hud-hidden) .control-card {
+        opacity: 1 !important;
+        transition: opacity 0.25s ease !important;
+    }
 }
