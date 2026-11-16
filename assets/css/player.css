@@ -306,13 +306,160 @@ body {
     color: #999;
 }
 
-@media (max-width: 650px) {
-    .floating-lyrics { bottom: 74px; }
-    .lyric-jp { font-size: 19px; }
-    .lyric-romaji { font-size: 12px; }
-    .lyric-id { font-size: 13px; }
-    .control-bar { bottom: 10px; left: 12px; right: 12px; padding: 6px 12px; }
-    .btn-play { width: 36px; height: 36px; }
-    .btn-restart { width: 32px; height: 32px; }
-    .info-grid { grid-template-columns: 1fr; }
+/* ==============================================================================
+   RESPONSIVITAS MOBILE & TOUCH OPTIMIZATION
+   ============================================================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 10px 8px;
+    }
+
+    .player-wrapper {
+        border-radius: 12px;
+    }
+
+    /* Posisi lirik mengambang yang aman di atas bar kontrol */
+    .floating-lyrics {
+        bottom: 68px;
+        left: 4%;
+        right: 4%;
+        gap: 4px;
+    }
+
+    .lyric-jp {
+        font-size: clamp(16px, 4.2vw, 22px);
+        letter-spacing: 0.8px;
+        line-height: 1.3;
+    }
+
+    .lyric-romaji {
+        font-size: clamp(11px, 2.8vw, 13px);
+    }
+
+    .lyric-id {
+        font-size: clamp(12px, 3.1vw, 14.5px);
+        max-width: 95%;
+        line-height: 1.35;
+    }
+
+    /* Kontrol audio yang ramah sentuhan jari (Touch Friendly) */
+    .control-bar {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        gap: 10px;
+        border-radius: 12px;
+    }
+
+    .btn-play {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+    }
+
+    .btn-restart {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+    }
+
+    .time-label {
+        font-size: 11.5px;
+        min-width: 36px;
+    }
+
+    /* Panel Info di HP */
+    .info-panel {
+        padding: 14px 16px;
+        border-radius: 12px;
+        gap: 12px;
+    }
+
+    .info-title {
+        font-size: 16px;
+    }
+
+    .info-subtitle {
+        font-size: 11px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .info-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        font-size: 11px;
+    }
+}
+
+/* Optimasi Khusus Layar HP Sangat Kecil / Portrait Ringkas (<= 480px) */
+@media (max-width: 480px) {
+    .floating-lyrics {
+        bottom: 62px;
+    }
+
+    .lyric-jp {
+        font-size: 16px;
+    }
+
+    .lyric-romaji {
+        font-size: 11px;
+    }
+
+    .lyric-id {
+        font-size: 12px;
+    }
+
+    .control-bar {
+        bottom: 8px;
+        left: 8px;
+        right: 8px;
+        padding: 5px 10px;
+        gap: 8px;
+    }
+
+    .btn-play {
+        width: 38px;
+        height: 38px;
+    }
+
+    .btn-restart {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+/* Optimasi HP Landscape (Layar Dimiringkan) */
+@media (max-height: 500px) and (orientation: landscape) {
+    body {
+        padding: 6px;
+    }
+
+    .player-wrapper {
+        max-width: 100vh * 1.77;
+        max-height: 94vh;
+    }
+
+    .floating-lyrics {
+        bottom: 58px;
+        gap: 2px;
+    }
+
+    .lyric-jp {
+        font-size: 18px;
+    }
+
+    .lyric-id {
+        font-size: 13px;
+    }
+
+    .control-bar {
+        bottom: 8px;
+        padding: 4px 12px;
+    }
 }
