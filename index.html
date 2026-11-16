@@ -6,83 +6,124 @@
     <title>ふたりぐらし ED: ココロノサクラ (Kokoro no Sakura) - Music & Lyrics Player</title>
     <!-- Favicon Rynet Portal -->
     <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
-    <!-- Stylesheet Offline Internal -->
+    <!-- Stylesheet Player -->
     <link rel="stylesheet" href="assets/css/player.css">
 </head>
 <body>
 
-    <!-- Wrapper Player -->
-    <div class="player-wrapper" id="playerWrapper">
-        
-        <!-- Viewport CG yang berganti-ganti sesuai urutan lagu (Hitam saat awal) -->
-        <div class="cg-viewport">
-            <img src="assets/image/imagedev_circle.png" id="cg-intro" class="cg-image" alt="Developer Logo">
-            <img src="assets/image/imagekokoro_start.png" id="cg-0" class="cg-image" alt="Start CG">
-            <img src="assets/image/imagekokoro_eki.png" id="cg-1" class="cg-image" alt="Agak Maju CG">
-            <img src="assets/image/imagekokoro_tsubomi.png" id="cg-2" class="cg-image" alt="Agak Tengah CG">
-            <img src="assets/image/imagekokoro_sunset.png" id="cg-3" class="cg-image" alt="Tengah CG">
-            <img src="assets/image/imagekokoro_aquarium.png" id="cg-4" class="cg-image" alt="Agak Mau Akhir CG">
-            <img src="assets/image/imagekokoro_sakura.png" id="cg-5" class="cg-image" alt="Agak Akhir CG">
-            <img src="assets/image/imagekokoro_ending.png" id="cg-6" class="cg-image" alt="Akhir CG">
-            <img src="assets/image/imagedesuwa.png" id="cg-outro" class="cg-image" alt="Translator Credit">
-        </div>
+    <!-- Container Utama Player -->
+    <main class="main-container">
 
-        <!-- Gradasi Gelap Bawah -->
-        <div class="vignette-overlay"></div>
+        <!-- Theater Video & Controls -->
+        <div class="player-theater" id="playerTheater">
+            
+            <!-- 1. Layar CG 16:9 Bersih (Hanya Menampilkan CG Asli & Teks Lirik) -->
+            <div class="player-wrapper" id="playerWrapper">
+                <!-- Viewport CG yang berganti-ganti sesuai alur lagu -->
+                <div class="cg-viewport">
+                    <img src="assets/image/imagedev_circle.png" id="cg-intro" class="cg-image" alt="Developer Logo">
+                    <img src="assets/image/imagekokoro_start.png" id="cg-0" class="cg-image" alt="Start CG">
+                    <img src="assets/image/imagekokoro_eki.png" id="cg-1" class="cg-image" alt="Agak Maju CG">
+                    <img src="assets/image/imagekokoro_tsubomi.png" id="cg-2" class="cg-image" alt="Agak Tengah CG">
+                    <img src="assets/image/imagekokoro_sunset.png" id="cg-3" class="cg-image" alt="Tengah CG">
+                    <img src="assets/image/imagekokoro_aquarium.png" id="cg-4" class="cg-image" alt="Agak Mau Akhir CG">
+                    <img src="assets/image/imagekokoro_sakura.png" id="cg-5" class="cg-image" alt="Agak Akhir CG">
+                    <img src="assets/image/imagekokoro_ending.png" id="cg-6" class="cg-image" alt="Akhir CG">
+                    <img src="assets/image/imagedesuwa.png" id="cg-outro" class="cg-image" alt="Translator Credit">
+                </div>
 
-        <!-- TEKS LIRIK MENGAMBANG -->
-        <div class="floating-lyrics" id="lyricsBox">
-            <div class="lyric-jp" id="textJp"></div>
-            <div class="lyric-romaji" id="textRomaji"></div>
-            <div class="lyric-id" id="textId"></div>
-        </div>
+                <!-- Gradasi Lembut Bawah CG -->
+                <div class="vignette-overlay"></div>
 
-        <!-- Audio Player Kontrol -->
-        <div class="control-bar">
-            <button class="btn-play" id="btnPlay" onclick="toggleAudio()" title="Putar / Jeda">
-                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <button class="btn-restart" onclick="restartVideo()" title="Restart dari awal (Logo Dev & Musik)">
-                <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
-            </button>
-            <span class="time-label" id="currentTime">00:00</span>
-            <div class="progress-container" id="progressContainer" onclick="seekAudio(event)">
-                <div class="progress-bar" id="progressBar"></div>
+                <!-- TEKS LIRIK MENGAMBANG (Bersih di area bawah CG tanpa tertutup kontrol) -->
+                <div class="floating-lyrics" id="lyricsBox">
+                    <div class="lyric-jp" id="textJp"></div>
+                    <div class="lyric-romaji" id="textRomaji"></div>
+                    <div class="lyric-id" id="textId"></div>
+                </div>
             </div>
-            <span class="time-label" id="durationTime">04:25</span>
+
+            <!-- 2. CARD KONTROL TERPISAH (DI BAWAH TAMPILAN CG) -->
+            <div class="control-card" id="controlCard">
+                
+                <!-- Kelompok Tombol Pemutar -->
+                <div class="control-buttons-group" id="buttonsGroup">
+                    <!-- Tombol Mundur 5 Detik -->
+                    <button class="btn-control btn-skip" id="btnSkipBack" onclick="skipAudio(-5)" title="Mundur 5 Detik (Keyboard: ←)" aria-label="Mundur 5 detik">
+                        <svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+                        <span class="btn-badge">5s</span>
+                    </button>
+
+                    <!-- Tombol Utama: Play / Pause -->
+                    <button class="btn-control btn-play" id="btnPlay" onclick="toggleAudio()" title="Putar / Jeda (Keyboard: Spasi)" aria-label="Putar atau jeda audio">
+                        <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+
+                    <!-- Tombol Replay Tersembunyi (Hanya Muncul Otomatis Saat Video Tamat / Selesai) -->
+                    <button class="btn-control btn-replay hidden" id="btnReplay" onclick="restartVideo()" title="Putar Ulang Lagu Dari Awal (Keyboard: R)" aria-label="Putar ulang lagu">
+                        <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                        <span class="btn-replay-text">Putar Ulang</span>
+                    </button>
+
+                    <!-- Tombol Maju 5 Detik -->
+                    <button class="btn-control btn-skip" id="btnSkipFwd" onclick="skipAudio(5)" title="Maju 5 Detik (Keyboard: →)" aria-label="Maju 5 detik">
+                        <span class="btn-badge">5s</span>
+                        <svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Kelompok Seeker Slider & Timer -->
+                <div class="control-seeker-group" id="seekerGroup">
+                    <span class="time-label" id="currentTime">00:00</span>
+                    <div class="seeker-slider-container" id="seekerContainer">
+                        <input type="range" class="seeker-slider" id="seekerSlider" min="0" max="100" value="0" step="0.1" aria-label="Seeker Waktu Lagu">
+                        <div class="seeker-fill" id="seekerFill"></div>
+                    </div>
+                    <span class="time-label" id="durationTime">04:25</span>
+                </div>
+            </div>
+
         </div>
+
+        <!-- 3. ACCORDION INFORMASI LAGU (TERSEMBUNYI SECARA DEFAULT) -->
+        <section class="info-accordion" id="infoAccordion">
+            <button class="accordion-header" id="infoToggle" onclick="toggleInfoPanel()" aria-expanded="false" title="Klik untuk menampilkan rincian informasi lagu">
+                <div class="accordion-title-wrap">
+                    <span class="accordion-icon">🌸</span>
+                    <span class="accordion-title" id="infoTitle">「ココロノサクラ」 (Kokoro no Sakura)</span>
+                    <span class="accordion-badge" id="infoRole">Ending Theme</span>
+                </div>
+                <div class="accordion-toggle-action">
+                    <span class="accordion-action-text" id="toggleStateText">Rincian Informasi</span>
+                    <svg class="accordion-arrow" id="toggleArrow" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </div>
+            </button>
+
+            <div class="accordion-body" id="accordionBody">
+                <div class="info-content-inner">
+                    <div class="info-grid" id="infoGrid">
+                        <!-- Disuntikkan secara dinamis oleh player.js dari database music_core.js -->
+                    </div>
+
+                    <div class="info-action-bar">
+                        <button class="btn-landscape-mode" onclick="toggleFullscreenLandscape()">
+                            <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                            <span>Layar Penuh (Mode Landscape)</span>
+                        </button>
+                    </div>
+
+                    <div class="info-footer">
+                        <span>© Game Developer & Craft Edge Lab • Hak Cipta Terjemahan Proyek oleh <strong>Rynet</strong></span>
+                        <span>⌨️ Pintasan Keyboard: <strong>Spasi</strong> (Putar/Jeda) • <strong>← / →</strong> (±5 Detik) • <strong>F</strong> (Layar Penuh) • <strong>R</strong> (Putar Ulang)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Audio Elements (File Offline Lokal) -->
         <audio id="audioElement" preload="metadata"></audio>
         <audio id="voiceLogoAudio" preload="auto"></audio>
-    </div>
-
-    <!-- Tombol Mode Putar Penuh Landscape (Khusus HP / Layar Lebar) -->
-    <div class="mobile-action-bar">
-        <button class="btn-landscape-mode" onclick="toggleFullscreenLandscape()">
-            <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-            <span>Tampilkan Penuh (Mode Landscape)</span>
-        </button>
-    </div>
-
-    <!-- Panel Informasi Lagu Publikasi (Dibuat Dinamis dari assets/js/music_core.js) -->
-    <div class="info-panel" id="infoPanel">
-        <div class="info-header">
-            <div class="info-title" id="infoTitle">
-                🌸 「ココロノサクラ」 (Kokoro no Sakura)
-            </div>
-            <span class="info-subtitle" id="infoRole">Ending Theme / Insert Song</span>
-        </div>
-
-        <div class="info-grid" id="infoGrid">
-            <!-- Disuntikkan secara otomatis oleh player.js dari database music_core.js -->
-        </div>
-
-        <div class="info-footer">
-            <span>© Game Developer & Craft Edge Lab • Hak Cipta Terjemahan Proyek oleh <strong>Rynet</strong></span>
-            <span>⌨️ Pintasan Keyboard: <strong>F</strong> (Layar Penuh) • <strong>Spasi</strong> (Putar/Jeda) • <strong>R</strong> (Restart)</span>
-        </div>
-    </div>
+    </main>
 
     <!-- Script Offline: 1. Database Lirik, 2. Logika Player -->
     <script src="assets/js/music_core.js"></script>

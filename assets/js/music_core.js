@@ -86,14 +86,22 @@ const MUSIC_CORE = {
         },
         {
             start: 48,
-            end: 54,
+            end: 53,
             cgIndex: 1,
             jp: "桜舞う　学生鞄",
             romaji: "Sakura mau, gakusei kaban",
             id: "Kelopak sakura menari lembut di atas tas sekolah."
         },
         {
-            start: 54,
+            start: 53,
+            end: 56,
+            cgIndex: 1,
+            jp: "（抱きしめて……）",
+            romaji: "（Dakishimete...）",
+            id: "（...dekaplah diriku.）"
+        },
+        {
+            start: 56,
             end: 60,
             cgIndex: 1,
             jp: "坂道　行き先　やっと会えるね",
