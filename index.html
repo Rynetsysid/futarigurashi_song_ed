@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ふたりぐらし ED: ココロノサクラ (Kokoro no Sakura) - Music & Lyrics Player</title>
     <!-- Favicon Rynet Portal -->
     <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
@@ -20,7 +20,7 @@
             <!-- 1. Layar CG 16:9 Bersih (Hanya Menampilkan CG Asli & Teks Lirik) -->
             <div class="player-wrapper" id="playerWrapper">
                 <!-- Viewport CG yang berganti-ganti sesuai alur lagu -->
-                <div class="cg-viewport">
+                <div class="cg-viewport" id="cgViewport">
                     <img src="assets/image/imagedev_circle.png" id="cg-intro" class="cg-image" alt="Developer Logo">
                     <img src="assets/image/imagekokoro_start.png" id="cg-0" class="cg-image" alt="Start CG">
                     <img src="assets/image/imagekokoro_eki.png" id="cg-1" class="cg-image" alt="Agak Maju CG">
@@ -30,6 +30,20 @@
                     <img src="assets/image/imagekokoro_sakura.png" id="cg-5" class="cg-image" alt="Agak Akhir CG">
                     <img src="assets/image/imagekokoro_ending.png" id="cg-6" class="cg-image" alt="Akhir CG">
                     <img src="assets/image/imagedesuwa.png" id="cg-outro" class="cg-image" alt="Translator Credit">
+                </div>
+
+                <!-- Indikator Efek Riak Double-Tap (Lompat 5s di HP) -->
+                <div class="ripple-overlay ripple-left" id="rippleLeft">
+                    <div class="ripple-circle">
+                        <svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+                        <span>-5 Detik</span>
+                    </div>
+                </div>
+                <div class="ripple-overlay ripple-right" id="rippleRight">
+                    <div class="ripple-circle">
+                        <svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+                        <span>+5 Detik</span>
+                    </div>
                 </div>
 
                 <!-- Gradasi Lembut Bawah CG -->
@@ -43,10 +57,10 @@
                 </div>
             </div>
 
-            <!-- 2. CARD KONTROL TERPISAH (DI BAWAH TAMPILAN CG) -->
+            <!-- 2. KONTROL PEMUTAR (Card Terpisah di Portrait / Floating HUD Mengambang di Landscape) -->
             <div class="control-card" id="controlCard">
                 
-                <!-- Kelompok Tombol Pemutar -->
+                <!-- Kelompok Tombol Pemutar (Mengambang di Tengah Layar saat Landscape) -->
                 <div class="control-buttons-group" id="buttonsGroup">
                     <!-- Tombol Mundur 5 Detik -->
                     <button class="btn-control btn-skip" id="btnSkipBack" onclick="skipAudio(-5)" title="Mundur 5 Detik (Keyboard: ←)" aria-label="Mundur 5 detik">
@@ -72,7 +86,7 @@
                     </button>
                 </div>
 
-                <!-- Kelompok Seeker Slider & Timer -->
+                <!-- Kelompok Seeker Slider & Timer (Mengambang di Bawah Layar saat Landscape) -->
                 <div class="control-seeker-group" id="seekerGroup">
                     <span class="time-label" id="currentTime">00:00</span>
                     <div class="seeker-slider-container" id="seekerContainer">
@@ -125,7 +139,7 @@
         <audio id="voiceLogoAudio" preload="auto"></audio>
     </main>
 
-    <!-- Script Offline: 1. Database Lirik, 2. Logika Player -->
+    <!-- Script Database & Logika Player -->
     <script src="assets/js/music_core.js"></script>
     <script src="assets/js/player.js"></script>
 </body>

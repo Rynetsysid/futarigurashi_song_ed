@@ -1,0 +1,898 @@
+/* ==============================================================================
+   STREAM MUSIK RYNET - STYLESHEET RESMI
+   Lagu: 「ココロノサクラ」 (Kokoro no Sakura)
+   Desain: Responsif Desktop & Android
+   Mode Landscape HP: Floating HUD Mengambang, Video 100% Utuh (No Crop), Auto-Hide 5s
+   ============================================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: #0d0d12;
+    color: #ffffff;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding-top: 38px;
+    padding-bottom: 40px;
+    padding-left: 16px;
+    padding-right: 16px;
+    overflow-x: hidden;
+    transition: background 0.3s;
+}
+
+/* Container Pembungkus Lebar Maksimal */
+.main-container {
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Theater Player (Menampung Layar CG & Kontrol) */
+.player-theater {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ==============================================================================
+   1. CG VIEWPORT (LAYAR CG ASLI 16:9 BERSIH - TANPA CROP)
+   ============================================================================== */
+.player-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000000;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 14px 45px rgba(255, 140, 0, 0.25), 0 0 0 1px rgba(255, 140, 0, 0.22);
+    cursor: pointer;
+}
+
+.cg-viewport {
+    position: absolute;
+    inset: 0;
+    background: #000000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Video/CG Asli Tanpa Crop (object-fit: contain) */
+.cg-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+}
+
+.cg-image.active {
+    opacity: 1;
+}
+
+/* Efek Vignette Lembut Bawah */
+.vignette-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.2) 38%, rgba(0, 0, 0, 0) 100%);
+    pointer-events: none;
+}
+
+/* ==============================================================================
+   INDIKATOR EFEK RIAK DOUBLE-TAP (LOMPAT ±5 DETIK)
+   ============================================================================== */
+.ripple-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 38%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 8;
+    transition: opacity 0.25s ease;
+}
+
+.ripple-overlay.ripple-left {
+    left: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255, 140, 0, 0.25) 0%, transparent 70%);
+}
+
+.ripple-overlay.ripple-right {
+    right: 0;
+    background: radial-gradient(circle at 70% 50%, rgba(255, 140, 0, 0.25) 0%, transparent 70%);
+}
+
+.ripple-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: rgba(18, 18, 24, 0.88);
+    border: 1px solid rgba(255, 140, 0, 0.5);
+    border-radius: 50%;
+    width: 78px;
+    height: 78px;
+    color: #ffeedb;
+    box-shadow: 0 0 24px rgba(255, 140, 0, 0.6);
+    transform: scale(0.7);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ripple-circle svg {
+    width: 24px;
+    height: 24px;
+    fill: #ffb347;
+}
+
+.ripple-circle span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.ripple-overlay.active {
+    opacity: 1;
+}
+
+.ripple-overlay.active .ripple-circle {
+    transform: scale(1.05);
+}
+
+/* ==============================================================================
+   LIRIK MENGAMBANG (BERSIH DI DALAM CG)
+   ============================================================================== */
+.floating-lyrics {
+    position: absolute;
+    bottom: 24px;
+    left: 4%;
+    right: 4%;
+    text-align: center;
+    pointer-events: none;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.floating-lyrics.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.lyric-jp {
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1.2px;
+    line-height: 1.35;
+    text-shadow: 
+        0 0 10px rgba(0, 0, 0, 0.95),
+        0 2px 4px rgba(0, 0, 0, 1),
+        0 0 20px rgba(255, 140, 0, 0.65);
+}
+
+.lyric-romaji {
+    font-size: 15px;
+    font-style: italic;
+    color: #ffd8a8;
+    letter-spacing: 0.5px;
+    text-shadow: 
+        0 0 8px rgba(0, 0, 0, 0.9),
+        0 2px 4px rgba(0, 0, 0, 1);
+}
+
+.lyric-id {
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    max-width: 86%;
+    line-height: 1.4;
+    letter-spacing: 0.4px;
+    text-shadow: 
+        0 0 8px rgba(0, 0, 0, 0.95),
+        0 2px 4px rgba(0, 0, 0, 1),
+        0 0 14px rgba(255, 165, 0, 0.45);
+}
+
+/* ==============================================================================
+   2. CARD KONTROL TERPISAH (DESKTOP & PORTRAIT HP)
+   ============================================================================== */
+.control-card {
+    width: 100%;
+    background: rgba(18, 18, 24, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 140, 0, 0.3);
+    border-radius: 16px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.control-buttons-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.btn-control {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.btn-control:active {
+    transform: scale(0.92);
+}
+
+/* Tombol Skip 5 Detik */
+.btn-skip {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffeedb;
+    gap: 2px;
+}
+
+.btn-skip:hover {
+    background: rgba(255, 140, 0, 0.25);
+    border-color: rgba(255, 140, 0, 0.6);
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(255, 140, 0, 0.35);
+}
+
+.btn-skip svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.btn-badge {
+    position: absolute;
+    bottom: -3px;
+    font-size: 9px;
+    font-weight: 800;
+    color: #ffb347;
+    background: rgba(18, 18, 22, 0.95);
+    padding: 1px 3px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 140, 0, 0.4);
+    letter-spacing: -0.2px;
+}
+
+/* Tombol Play/Pause Utama */
+.btn-play {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff8c00 0%, #ffa500 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 18px rgba(255, 140, 0, 0.5);
+}
+
+.btn-play:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 24px rgba(255, 140, 0, 0.7);
+}
+
+.btn-play svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    margin-left: 2px;
+}
+
+.btn-play.playing svg {
+    margin-left: 0;
+}
+
+/* Tombol Replay Khusus */
+.btn-replay {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #ff8c00 0%, #ff5722 100%);
+    color: #ffffff;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 13.5px;
+    box-shadow: 0 4px 20px rgba(255, 87, 34, 0.55);
+    animation: replayPulse 2s infinite ease-in-out;
+}
+
+@keyframes replayPulse {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(255, 140, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 4px 30px rgba(255, 87, 34, 0.85);
+        transform: scale(1.03);
+    }
+}
+
+.btn-replay:hover {
+    transform: scale(1.06);
+}
+
+.btn-replay svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.btn-replay.hidden,
+.btn-control.hidden {
+    display: none !important;
+}
+
+/* Kelompok Seeker Slider & Timer */
+.control-seeker-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.time-label {
+    font-size: 13px;
+    color: #c0c0cb;
+    font-variant-numeric: tabular-nums;
+    font-family: 'Consolas', monospace, sans-serif;
+    min-width: 42px;
+    text-align: center;
+}
+
+.seeker-slider-container {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    height: 24px;
+}
+
+.seeker-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.seeker-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ffa500;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.9);
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.seeker-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.28);
+    box-shadow: 0 0 16px rgba(255, 165, 0, 1);
+}
+
+.seeker-slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ffa500;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.9);
+    cursor: pointer;
+}
+
+.seeker-fill {
+    position: absolute;
+    left: 0;
+    top: 9px;
+    height: 6px;
+    background: linear-gradient(90deg, #ff8c00, #ffb347);
+    border-radius: 3px;
+    width: 0%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ==============================================================================
+   3. ACCORDION INFORMASI LAGU (TERSEMBUNYI SECARA DEFAULT)
+   ============================================================================== */
+.info-accordion {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 140, 0, 0.22);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.info-accordion:hover {
+    border-color: rgba(255, 140, 0, 0.45);
+}
+
+.accordion-header {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 14px 20px;
+    color: #ffeedb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.accordion-header:hover {
+    background: rgba(255, 140, 0, 0.08);
+}
+
+.accordion-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.accordion-icon {
+    font-size: 16px;
+}
+
+.accordion-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffeedb;
+    letter-spacing: 0.3px;
+}
+
+.accordion-badge {
+    font-size: 11px;
+    color: #ff9d2e;
+    font-weight: 600;
+    background: rgba(255, 140, 0, 0.15);
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 140, 0, 0.3);
+}
+
+.accordion-toggle-action {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #aaaab5;
+    font-size: 12.5px;
+    font-weight: 500;
+}
+
+.accordion-arrow {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    transition: transform 0.3s ease;
+}
+
+.accordion-body {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    border-top: 1px solid transparent;
+}
+
+.info-accordion.open .accordion-body {
+    max-height: 520px;
+    opacity: 1;
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.info-accordion.open .accordion-arrow {
+    transform: rotate(180deg);
+}
+
+.info-content-inner {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px 18px;
+    font-size: 13.5px;
+    line-height: 1.5;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.info-label {
+    font-size: 11px;
+    color: #888899;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.info-value {
+    color: #eeeef5;
+    font-weight: 500;
+}
+
+.info-value.highlight {
+    color: #ffb347;
+    font-weight: 600;
+}
+
+.info-action-bar {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 6px;
+}
+
+.btn-landscape-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 140, 0, 0.15);
+    border: 1px solid rgba(255, 140, 0, 0.4);
+    color: #ffeedb;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-landscape-mode:hover {
+    background: rgba(255, 140, 0, 0.3);
+    border-color: rgba(255, 165, 0, 0.7);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.btn-landscape-mode svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.info-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11.5px;
+    color: #8f8f9e;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* ==============================================================================
+   RESPONSIVITAS MOBILE (PORTRAIT HP)
+   ============================================================================== */
+@media (max-width: 768px) and (orientation: portrait), (pointer: coarse) and (orientation: portrait) {
+    body {
+        padding-top: 18px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .player-wrapper {
+        border-radius: 14px;
+    }
+
+    .floating-lyrics {
+        bottom: 16px;
+        left: 3%;
+        right: 3%;
+        gap: 4px;
+    }
+
+    .lyric-jp {
+        font-size: clamp(16px, 4.4vw, 22px);
+        letter-spacing: 0.8px;
+    }
+
+    .lyric-romaji {
+        font-size: clamp(11.5px, 2.9vw, 13.5px);
+    }
+
+    .lyric-id {
+        font-size: clamp(12.5px, 3.2vw, 14.5px);
+        max-width: 95%;
+    }
+
+    /* Layout 2 Baris di Portrait */
+    .control-card {
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 14px;
+    }
+
+    .control-seeker-group {
+        width: 100%;
+        order: 1;
+        gap: 10px;
+    }
+
+    .seeker-slider {
+        height: 7px;
+    }
+
+    .seeker-slider::-webkit-slider-thumb {
+        width: 18px;
+        height: 18px;
+    }
+
+    .seeker-slider::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+    }
+
+    .control-buttons-group {
+        width: 100%;
+        order: 2;
+        justify-content: center;
+        gap: 18px;
+    }
+
+    .btn-play {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+    }
+
+    .btn-skip {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+    }
+
+    .btn-replay {
+        height: 46px;
+        padding: 0 20px;
+        font-size: 14px;
+    }
+
+    .accordion-header {
+        padding: 12px 16px;
+    }
+
+    .accordion-title {
+        font-size: 14px;
+    }
+
+    .accordion-badge {
+        display: none;
+    }
+
+    .info-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+}
+
+/* ==============================================================================
+   MODE LANDSCAPE / LAYAR PENUH HP (CINEMA FLOATING HUD)
+   Video 100% Utuh (No Crop), Kontrol Mengambang Transparan di Atas Video
+   ============================================================================== */
+@media (orientation: landscape) and (max-height: 600px), 
+       :fullscreen .player-theater, 
+       :-webkit-full-screen .player-theater {
+    
+    body {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #000000 !important;
+        overflow: hidden !important;
+    }
+
+    .main-container {
+        max-width: 100vw !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        gap: 0 !important;
+    }
+
+    .player-theater {
+        width: 100vw !important;
+        height: 100vh !important;
+        gap: 0 !important;
+    }
+
+    .player-wrapper {
+        width: 100vw !important;
+        height: 100vh !important;
+        aspect-ratio: auto !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    /* Video Tetap Utuh 16:9 Tanpa Terpotong (object-fit: contain) */
+    .cg-viewport {
+        background: #000000 !important;
+    }
+
+    .cg-image {
+        object-fit: contain !important;
+    }
+
+    /* Sembunyikan Accordion Info saat Landscape */
+    .info-accordion {
+        display: none !important;
+    }
+
+    /* TRANSFORMASI KONTROL: CARD HILANG -> MENJADI MENGAMBANG DI ATAS VIDEO */
+    .control-card {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        pointer-events: none !important;
+        z-index: 10 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    /* TOMBOL PEMUTAR MENGAMBANG DI TENGAH LAYAR */
+    .control-buttons-group {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 36px !important;
+        pointer-events: auto !important;
+    }
+
+    .btn-skip {
+        width: 48px !important;
+        height: 48px !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(8px) !important;
+        border: 1.5px solid rgba(255, 140, 0, 0.55) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .btn-skip svg {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .btn-play {
+        width: 60px !important;
+        height: 60px !important;
+        background: linear-gradient(135deg, #ff8c00 0%, #ffa500 100%) !important;
+        box-shadow: 0 0 25px rgba(255, 140, 0, 0.8) !important;
+    }
+
+    .btn-play svg {
+        width: 26px !important;
+        height: 26px !important;
+    }
+
+    .btn-replay {
+        height: 52px !important;
+        padding: 0 22px !important;
+        font-size: 15px !important;
+    }
+
+    /* SEEKER BAR MENGAMBANG DI BAGIAN BAWAH */
+    .control-seeker-group {
+        position: absolute !important;
+        bottom: 16px !important;
+        left: 24px !important;
+        right: 24px !important;
+        width: calc(100% - 48px) !important;
+        background: rgba(14, 14, 20, 0.68) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(255, 140, 0, 0.3) !important;
+        border-radius: 24px !important;
+        padding: 6px 18px !important;
+        pointer-events: auto !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .seeker-slider::-webkit-slider-thumb {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .seeker-slider::-moz-range-thumb {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    /* POSISI LIRIK DI MODE LANDSCAPE: DI ATAS SEEKER BAR */
+    .floating-lyrics {
+        bottom: 78px !important;
+        left: 6% !important;
+        right: 6% !important;
+    }
+
+    .lyric-jp {
+        font-size: clamp(18px, 4vw, 26px) !important;
+    }
+
+    .lyric-romaji {
+        font-size: clamp(12px, 2.5vw, 15px) !important;
+    }
+
+    .lyric-id {
+        font-size: clamp(13px, 2.8vw, 16px) !important;
+    }
+
+    /* AUTO-HIDE HUD KONTROL SETELAH 5 DETIK */
+    .player-theater.hud-hidden .control-card {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity 0.4s ease !important;
+    }
+
+    .player-theater:not(.hud-hidden) .control-card {
+        opacity: 1 !important;
+        transition: opacity 0.25s ease !important;
+    }
+}
