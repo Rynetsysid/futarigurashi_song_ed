@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ふたりぐらし ED: ココロノサクラ (Kokoro no Sakura) - Music & Lyrics Player</title>
+    <!-- Stylesheet Offline Internal -->
+    <link rel="stylesheet" href="assets/css/player.css">
+</head>
+<body>
+
+    <!-- Wrapper Player -->
+    <div class="player-wrapper" id="playerWrapper">
+        
+        <!-- Viewport CG yang berganti-ganti sesuai urutan lagu (Hitam saat awal) -->
+        <div class="cg-viewport">
+            <img src="assets/image/imagedev_circle.png" id="cg-intro" class="cg-image" alt="Developer Logo">
+            <img src="assets/image/imagekokoro_start.png" id="cg-0" class="cg-image" alt="Start CG">
+            <img src="assets/image/imagekokoro_eki.png" id="cg-1" class="cg-image" alt="Agak Maju CG">
+            <img src="assets/image/imagekokoro_tsubomi.png" id="cg-2" class="cg-image" alt="Agak Tengah CG">
+            <img src="assets/image/imagekokoro_sunset.png" id="cg-3" class="cg-image" alt="Tengah CG">
+            <img src="assets/image/imagekokoro_aquarium.png" id="cg-4" class="cg-image" alt="Agak Mau Akhir CG">
+            <img src="assets/image/imagekokoro_sakura.png" id="cg-5" class="cg-image" alt="Agak Akhir CG">
+            <img src="assets/image/imagekokoro_ending.png" id="cg-6" class="cg-image" alt="Akhir CG">
+            <img src="assets/image/imagedesuwa.png" id="cg-outro" class="cg-image" alt="Translator Credit">
+        </div>
+
+        <!-- Gradasi Gelap Bawah -->
+        <div class="vignette-overlay"></div>
+
+        <!-- TEKS LIRIK MENGAMBANG -->
+        <div class="floating-lyrics" id="lyricsBox">
+            <div class="lyric-jp" id="textJp"></div>
+            <div class="lyric-romaji" id="textRomaji"></div>
+            <div class="lyric-id" id="textId"></div>
+        </div>
+
+        <!-- Audio Player Kontrol -->
+        <div class="control-bar">
+            <button class="btn-play" id="btnPlay" onclick="toggleAudio()" title="Putar / Jeda">
+                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <button class="btn-restart" onclick="restartVideo()" title="Restart dari awal (Logo Dev & Musik)">
+                <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+            </button>
+            <span class="time-label" id="currentTime">00:00</span>
+            <div class="progress-container" id="progressContainer" onclick="seekAudio(event)">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <span class="time-label" id="durationTime">04:25</span>
+        </div>
+
+        <!-- Audio Elements (File Offline Lokal) -->
+        <audio id="audioElement" preload="metadata"></audio>
+        <audio id="voiceLogoAudio" preload="auto"></audio>
+    </div>
+
+    <!-- Panel Informasi Lagu Publikasi (Dibuat Dinamis dari assets/js/music_core.js) -->
+    <div class="info-panel" id="infoPanel">
+        <div class="info-header">
+            <div class="info-title" id="infoTitle">
+                🌸 「ココロノサクラ」 (Kokoro no Sakura)
+            </div>
+            <span class="info-subtitle" id="infoRole">Ending Theme / Insert Song</span>
+        </div>
+
+        <div class="info-grid" id="infoGrid">
+            <!-- Disuntikkan secara otomatis oleh player.js dari database music_core.js -->
+        </div>
+
+        <div class="info-footer">
+            <span>© Game Developer & Craft Edge Lab • Hak Cipta Terjemahan Proyek oleh <strong>Rynet</strong></span>
+            <span>⌨️ Pintasan Keyboard: <strong>F</strong> (Layar Penuh) • <strong>Spasi</strong> (Putar/Jeda) • <strong>R</strong> (Restart)</span>
+        </div>
+    </div>
+
+    <!-- Script Offline: 1. Database Lirik, 2. Logika Player -->
+    <script src="assets/js/music_core.js"></script>
+    <script src="assets/js/player.js"></script>
+</body>
+</html>
