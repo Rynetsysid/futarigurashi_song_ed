@@ -246,9 +246,9 @@ const MUSIC_CORE = {
             start: 151,
             end: 153,
             cgIndex: 3,
-            jp: "（一人に……）",
-            romaji: "（Hitori ni...）",
-            id: "（...kini bersatu menjadi satu.）"
+            jp: "（一人に揺れよ……）",
+            romaji: "（Hitori ni ure yo...）",
+            id: "（...kini terbuai menjadi satu.）"
         },
 
         // -------------------------------------------------------------
