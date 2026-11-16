@@ -145,14 +145,41 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    window.toggleFullscreen = function() {
+    // Mode Layar Penuh + Otomatis Kunci Orientasi Landscape (Khusus Android/Mobile)
+    window.toggleFullscreenLandscape = async function() {
         const wrapper = document.getElementById('playerWrapper');
-        if (!document.fullscreenElement) {
-            wrapper.requestFullscreen().catch(err => alert(err.message));
-        } else {
-            document.exitFullscreen();
+        try {
+            if (!document.fullscreenElement) {
+                // 1. Masuk ke mode fullscreen
+                if (wrapper.requestFullscreen) {
+                    await wrapper.requestFullscreen();
+                } else if (wrapper.webkitRequestFullscreen) {
+                    await wrapper.webkitRequestFullscreen();
+                }
+
+                // 2. Kunci orientasi ke landscape jika didukung browser HP (Chrome Android, dll)
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(() => {
+                        // Jika orientasi diabaikan/tidak didukung perangkat, tetap aman
+                    });
+                }
+            } else {
+                // Keluar dari fullscreen
+                if (document.exitFullscreen) {
+                    await document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    await document.webkitExitFullscreen();
+                }
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            }
+        } catch (err) {
+            console.log("Fullscreen/Orientation error:", err);
         }
     };
+
+    window.toggleFullscreen = window.toggleFullscreenLandscape;
 
     // Keyboard Shortcuts (F = Fullscreen, Spasi = Play/Pause, R = Restart)
     document.addEventListener('keydown', (e) => {
